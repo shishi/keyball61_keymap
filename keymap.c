@@ -46,6 +46,8 @@ void triple_t(qk_tap_dance_state_t *state, void *user_data) {
     }else if(state->count == 2){
         register_code(KC_T);
         unregister_code(KC_T);
+        register_code(KC_T);
+        unregister_code(KC_T);
     }else if(state->count == 3){
         register_code(KC_LCTL);
         register_code(KC_T);
