@@ -23,22 +23,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // double tap
 enum {
   TD_CTRL_Q = 0,
-  TD_CTRL_W = 1,
-  TD_CTRL_E = 2,
-  TD_CTRL_R = 3,
-  TD_CTRL_T = 4,
-  TD_CTRL_G = 5,
-  TD_CTRL_Z = 6,
-  TD_CTRL_X = 7,
-  TD_CTRL_C = 8,
-  TD_CTRL_V = 9,
-  TD_CTRL_B = 10,
-  TD_TRIPLE_T = 11,
-  TD_TRIPLE_BRACE_START = 12,
-  TD_TRIPLE_BRACE_END = 13
+  TD_CTRL_W,
+  TD_CTRL_E,
+  TD_CTRL_R,
+  TD_CTRL_T,
+  TD_CTRL_G,
+  TD_CTRL_Z,
+  TD_CTRL_X,
+  TD_CTRL_C,
+  TD_CTRL_V,
+  TD_CTRL_B,
+  TD_TRIPLE_W,
+  TD_TRIPLE_T,
+  TD_TRIPLE_BRACE_START,
+  TD_TRIPLE_BRACE_END
 };
 
 // triple tap
+void triple_w(qk_tap_dance_state_t *state, void *user_data) {
+    if(state->count == 1){
+        register_code(KC_W);
+        unregister_code(KC_W);
+    }else if(state->count == 2){
+        register_code(KC_W);
+        unregister_code(KC_W);
+        register_code(KC_W);
+        unregister_code(KC_W);
+    }else if(state->count == 3){
+        register_code(KC_LCTL);
+        register_code(KC_W);
+        unregister_code(KC_W);
+        unregister_code(KC_LCTL);
+    }
+    reset_tap_dance (state);
+}
+
 void triple_t(qk_tap_dance_state_t *state, void *user_data) {
     if(state->count == 1){
         register_code(KC_T);
@@ -105,6 +124,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
   [TD_CTRL_C]  = ACTION_TAP_DANCE_DOUBLE(KC_C, C(KC_C)),
   [TD_CTRL_V]  = ACTION_TAP_DANCE_DOUBLE(KC_V, C(KC_V)),
   [TD_CTRL_B]  = ACTION_TAP_DANCE_DOUBLE(KC_B, C(KC_B)),
+  [TD_TRIPLE_W] = ACTION_TAP_DANCE_FN(triple_w),
   [TD_TRIPLE_T] = ACTION_TAP_DANCE_FN(triple_t),
   [TD_TRIPLE_BRACE_START] = ACTION_TAP_DANCE_FN(triple_brace_start),
   [TD_TRIPLE_BRACE_END] = ACTION_TAP_DANCE_FN(triple_brace_end)
@@ -113,11 +133,11 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_universal(
-    TO(2)    , KC_1          , KC_2          , KC_3          , KC_4          , KC_5            ,                                                               KC_6          , KC_7         , KC_8         , KC_9         , KC_0            , TO(3)         ,
-    KC_JYEN  , TD(TD_CTRL_Q) , TD(TD_CTRL_W) , TD(TD_CTRL_E) , TD(TD_CTRL_R) , TD(TD_TRIPLE_T) ,                                                               KC_Y          , KC_U         , KC_I         , KC_O         , KC_P            , KC_GRV        ,
-    KC_MINUS , LGUI_T(KC_A)  , LALT_T(KC_S)  , LSFT_T(KC_D)  , LCTL_T(KC_F)  , TD(TD_CTRL_G)   ,                                                               KC_H          , RCTL_T(KC_J) , RSFT_T(KC_K) , RALT_T(KC_L) , RGUI_T(KC_SCLN) , LT(2,KC_QUOT) ,
-    KC_EQL   , TD(TD_CTRL_Z) , TD(TD_CTRL_X) , TD(TD_CTRL_C) , TD(TD_CTRL_V) , TD(TD_CTRL_B)   , TD(TD_TRIPLE_BRACE_START),          TD(TD_TRIPLE_BRACE_END) , KC_N          , KC_M         , KC_COMM      , KC_DOT       , KC_SLSH         , KC_BSLS       ,
-    KC_MEH   , KC_APP        , XXXXXXX       , XXXXXXX       , LT(3,KC_ESC)  , LT(2,KC_SPC)    , LT(1,KC_TAB) ,                      LT(1,KC_ENTER)          , LT(2,KC_BSPC) , XXXXXXX      , XXXXXXX      , XXXXXXX      , KC_PSCR         , KC_MEH
+    TO(2)    , KC_1          , KC_2            , KC_3          , KC_4          , KC_5            ,                                                               KC_6          , KC_7         , KC_8         , KC_9         , KC_0            , TO(3)         ,
+    KC_JYEN  , TD(TD_CTRL_Q) , TD(TD_TRIPLE_W) , TD(TD_CTRL_E) , TD(TD_CTRL_R) , TD(TD_TRIPLE_T) ,                                                               KC_Y          , KC_U         , KC_I         , KC_O         , KC_P            , KC_GRV        ,
+    KC_MINUS , LGUI_T(KC_A)  , LALT_T(KC_S)    , LSFT_T(KC_D)  , LCTL_T(KC_F)  , TD(TD_CTRL_G)   ,                                                               KC_H          , RCTL_T(KC_J) , RSFT_T(KC_K) , RALT_T(KC_L) , RGUI_T(KC_SCLN) , LT(2,KC_QUOT) ,
+    KC_EQL   , TD(TD_CTRL_Z) , TD(TD_CTRL_X)   , TD(TD_CTRL_C) , TD(TD_CTRL_V) , TD(TD_CTRL_B)   , TD(TD_TRIPLE_BRACE_START),          TD(TD_TRIPLE_BRACE_END) , KC_N          , KC_M         , KC_COMM      , KC_DOT       , KC_SLSH         , KC_BSLS       ,
+    KC_MEH   , KC_APP        , XXXXXXX         , XXXXXXX       , LT(3,KC_ESC)  , LT(2,KC_SPC)    , LT(1,KC_TAB) ,                      LT(1,KC_ENTER)          , LT(2,KC_BSPC) , XXXXXXX      , XXXXXXX      , XXXXXXX      , KC_PSCR         , KC_MEH
   ),
 
   [1] = LAYOUT_universal(
