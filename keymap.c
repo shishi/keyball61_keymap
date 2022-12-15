@@ -124,9 +124,9 @@ void z_reset (qk_tap_dance_state_t *state, void *user_data);
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_universal(
     TO(2)    , KC_1         , KC_2         , KC_3         , KC_4         , KC_5         ,                                          KC_6          , KC_7         , KC_8         , KC_9         , KC_0            , TO(3)         ,
-    KC_JYEN  , KC_Q         , KC_W         , TD(TD_E)     , TD(TD_R)     , TD(TD_T)     ,                                          TD(TD_Y)      , KC_U         , TD(TD_I)     , KC_O         , KC_P            , KC_GRV        ,
+    TO(2)    , KC_Q         , KC_W         , TD(TD_E)     , TD(TD_R)     , TD(TD_T)     ,                                          TD(TD_Y)      , KC_U         , TD(TD_I)     , KC_O         , KC_P            , KC_GRV        ,
     KC_MINUS , LGUI_T(KC_A) , LALT_T(KC_S) , LSFT_T(KC_D) , LCTL_T(KC_F) , TD(TD_G)     ,                                          TD(TD_H)      , RCTL_T(KC_J) , RSFT_T(KC_K) , RALT_T(KC_L) , RGUI_T(KC_SCLN) , LT(1,KC_QUOT) ,
-    KC_EQL   , TD(TD_Z)     , TD(TD_X)     , TD(TD_C)     , TD(TD_V)     , TD(TD_B)     , KC_LNG1      ,          KC_LNG2        , TD(TD_N)      , KC_M         , KC_COMM      , KC_DOT       , KC_SLSH         , KC_BSLS       ,
+    KC_EQL   , TD(TD_Z)     , TD(TD_X)     , TD(TD_C)     , TD(TD_V)     , TD(TD_B)     , KC_LNG1      ,          KC_LNG2        , TD(TD_N)      , KC_M         , KC_COMM      , KC_DOT       , KC_SLSH         , LT(2,KC_BSLS) ,
     KC_MEH   , KC_APP       , XXXXXXX      , XXXXXXX      , LT(3,KC_ESC) , LT(2,KC_SPC) , LT(1,KC_TAB) ,          LT(1,KC_ENTER) , LT(2,KC_BSPC) , XXXXXXX      , XXXXXXX      , XXXXXXX      , KC_PSCR         , KC_MEH
   ),
 
@@ -139,11 +139,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [2] = LAYOUT_universal(
-    TO(0)   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                XXXXXXX , KC_INS   , KC_SCRL , XXXXXXX  , XXXXXXX , TO(0)   ,
-    KC_LALT , KC_F1   , KC_F2   , KC_F3   , KC_F4   , XXXXXXX ,                                XXXXXXX , KC_HOME  , KC_END  , XXXXXXX  , XXXXXXX , KC_RALT ,
-    KC_LCTL , KC_F5   , KC_F6   , KC_F7   , KC_F8   , XXXXXXX ,                                KC_LEFT , KC_DOWN  , KC_UP   , KC_RGHT  , XXXXXXX , KC_RCTL ,
-    KC_LSFT , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , XXXXXXX ,            XXXXXXX , XXXXXXX , KC_PGUP  , KC_PGDN , XXXXXXX  , XXXXXXX , KC_RSFT ,
-    KC_LGUI , KC_F13  , KC_F14  , KC_F15  , XXXXXXX , XXXXXXX , XXXXXXX ,            XXXXXXX , KC_DEL  , XXXXXXX  , XXXXXXX , XXXXXXX  , XXXXXXX , KC_RGUI
+    TO(0)   , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                 XXXXXXX , KC_INS   , KC_SCRL , XXXXXXX  , XXXXXXX , TO(0)   ,
+    KC_LALT , KC_F1   , KC_F2   , KC_F3   , KC_F4   , XXXXXXX ,                                 XXXXXXX , KC_HOME  , KC_END  , XXXXXXX  , XXXXXXX , KC_RALT ,
+    KC_LCTL , KC_F5   , KC_F6   , KC_F7   , KC_F8   , XXXXXXX ,                                 KC_LEFT , KC_DOWN  , KC_UP   , KC_RGHT  , XXXXXXX , KC_RCTL ,
+    KC_LSFT , KC_F9   , KC_F10  , KC_F11  , KC_F12  , XXXXXXX , XXXXXXX  ,            XXXXXXX , XXXXXXX , KC_PGUP  , KC_PGDN , XXXXXXX  , XXXXXXX , KC_RSFT ,
+    KC_LGUI , KC_F13  , KC_F14  , KC_F15  , KC_BSPC , KC_SPC  , KC_ENTER ,            XXXXXXX , KC_DEL  , XXXXXXX  , XXXXXXX , XXXXXXX  , XXXXXXX , KC_RGUI
   ),
 
   [3] = LAYOUT_universal(
@@ -164,7 +164,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 
 #ifdef OLED_ENABLE
 
-#    include "lib/oledkit/oledkit.h"
+#include "lib/oledkit/oledkit.h"
 
 void oledkit_render_info_user(void) {
     keyball_oled_render_keyinfo();
