@@ -33,7 +33,8 @@ enum {
     DOUBLE_SINGLE_TAP = 5, //send two single taps
     TRIPLE_TAP = 6,
     TRIPLE_HOLD = 7,
-    TRIPLE_SINGLE_TAP = 8 //send three single taps
+    TRIPLE_SINGLE_TAP = 8, //send three single taps
+    MORE_TAP = 9
 };
 
 enum {
@@ -223,6 +224,9 @@ int cur_dance (tap_dance_state_t *state) {
         else if (state->pressed) return TRIPLE_HOLD;
         else return TRIPLE_TAP;
     }
+    else if (state->count > 3) {
+        return MORE_TAP;
+    }
     else return 99; //magic number. At some point this method will expand to work for more presses
 };
 
@@ -280,6 +284,13 @@ static tap ztap_state = {
     .state = 0
 };
 
+void repeat_key_x_time(uint16_t keycode, int x) {
+    for (int i = 0; i < x; i++) {
+        register_code(keycode);
+        unregister_code(keycode);
+    }
+}
+
 void b_finished (tap_dance_state_t *state, void *user_data) {
     btap_state.state = cur_dance(state);
     switch (btap_state.state) {
@@ -293,7 +304,8 @@ void b_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_B); unregister_code(KC_B); register_code(KC_B); unregister_code(KC_B); register_code(KC_B); break;
         case TRIPLE_HOLD: register_code(KC_B); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_B); unregister_code(KC_B); register_code(KC_B); unregister_code(KC_B); register_code(KC_B);
+        case TRIPLE_SINGLE_TAP: register_code(KC_B); unregister_code(KC_B); register_code(KC_B); unregister_code(KC_B); register_code(KC_B); break;
+        default: break;
     }
 };
 void b_reset (tap_dance_state_t *state, void *user_data) {
@@ -305,7 +317,8 @@ void b_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_B); break;
         case TRIPLE_TAP: unregister_code(KC_B); break;
         case TRIPLE_HOLD: unregister_code(KC_B); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_B);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_B); break;
+        default: break;
     }
     btap_state.state = 0;
 };
@@ -323,7 +336,8 @@ void c_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_C); unregister_code(KC_C); register_code(KC_C); unregister_code(KC_C); register_code(KC_C); break;
         case TRIPLE_HOLD: register_code(KC_C); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_C); unregister_code(KC_C); register_code(KC_C); unregister_code(KC_C); register_code(KC_C);
+        case TRIPLE_SINGLE_TAP: register_code(KC_C); unregister_code(KC_C); register_code(KC_C); unregister_code(KC_C); register_code(KC_C); break;
+        default: break;
     }
 };
 void c_reset (tap_dance_state_t *state, void *user_data) {
@@ -335,7 +349,8 @@ void c_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_C); break;
         case TRIPLE_TAP: unregister_code(KC_C); break;
         case TRIPLE_HOLD: unregister_code(KC_C); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_C);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_C); break;
+        default: break;
     }
     ctap_state.state = 0;
 };
@@ -353,7 +368,8 @@ void e_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_E); unregister_code(KC_E); register_code(KC_E); unregister_code(KC_E); register_code(KC_E); break;
         case TRIPLE_HOLD: register_code(KC_E); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_E); unregister_code(KC_E); register_code(KC_E); unregister_code(KC_E); register_code(KC_E);
+        case TRIPLE_SINGLE_TAP: register_code(KC_E); unregister_code(KC_E); register_code(KC_E); unregister_code(KC_E); register_code(KC_E); break;
+        default: break;
     }
 };
 void e_reset (tap_dance_state_t *state, void *user_data) {
@@ -365,7 +381,8 @@ void e_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_E); break;
         case TRIPLE_TAP: unregister_code(KC_E); break;
         case TRIPLE_HOLD: unregister_code(KC_E); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_E);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_E); break;
+        default: break;
     }
     etap_state.state = 0;
 };
@@ -383,7 +400,8 @@ void g_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_G); unregister_code(KC_G); register_code(KC_G); unregister_code(KC_G); register_code(KC_G); break;
         case TRIPLE_HOLD: register_code(KC_G); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_G); unregister_code(KC_G); register_code(KC_G); unregister_code(KC_G); register_code(KC_G);
+        case TRIPLE_SINGLE_TAP: register_code(KC_G); unregister_code(KC_G); register_code(KC_G); unregister_code(KC_G); register_code(KC_G); break;
+        default: break;
     }
 };
 void g_reset (tap_dance_state_t *state, void *user_data) {
@@ -395,7 +413,8 @@ void g_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_G); break;
         case TRIPLE_TAP: unregister_code(KC_G); break;
         case TRIPLE_HOLD: unregister_code(KC_G); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_G);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_G); break;
+        default: break;
     }
     gtap_state.state = 0;
 };
@@ -413,7 +432,8 @@ void h_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_H); unregister_code(KC_H); register_code(KC_H); unregister_code(KC_H); register_code(KC_H); break;
         case TRIPLE_HOLD: register_code(KC_H); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_H); unregister_code(KC_H); register_code(KC_H); unregister_code(KC_H); register_code(KC_H);
+        case TRIPLE_SINGLE_TAP: register_code(KC_H); unregister_code(KC_H); register_code(KC_H); unregister_code(KC_H); register_code(KC_H); break;
+        default: break;
     }
 };
 void h_reset (tap_dance_state_t *state, void *user_data) {
@@ -425,7 +445,8 @@ void h_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_H); break;
         case TRIPLE_TAP: unregister_code(KC_H); break;
         case TRIPLE_HOLD: unregister_code(KC_H); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_H);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_H); break;
+        default: break;
     }
     htap_state.state = 0;
 };
@@ -443,7 +464,8 @@ void i_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_I); unregister_code(KC_I); register_code(KC_I); unregister_code(KC_I); register_code(KC_I); break;
         case TRIPLE_HOLD: register_code(KC_I); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_I); unregister_code(KC_I); register_code(KC_I); unregister_code(KC_I); register_code(KC_I);
+        case TRIPLE_SINGLE_TAP: register_code(KC_I); unregister_code(KC_I); register_code(KC_I); unregister_code(KC_I); register_code(KC_I); break;
+        default: break;
     }
 };
 void i_reset (tap_dance_state_t *state, void *user_data) {
@@ -455,7 +477,8 @@ void i_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_I); break;
         case TRIPLE_TAP: unregister_code(KC_I); break;
         case TRIPLE_HOLD: unregister_code(KC_I); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_I);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_I); break;
+        default: break;
     }
     itap_state.state = 0;
 };
@@ -473,7 +496,8 @@ void n_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_N); unregister_code(KC_N); register_code(KC_N); unregister_code(KC_N); register_code(KC_N); break;
         case TRIPLE_HOLD: register_code(KC_N); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_N); unregister_code(KC_N); register_code(KC_N); unregister_code(KC_N); register_code(KC_N);
+        case TRIPLE_SINGLE_TAP: register_code(KC_N); unregister_code(KC_N); register_code(KC_N); unregister_code(KC_N); register_code(KC_N); break;
+        default: break;
     }
 };
 void n_reset (tap_dance_state_t *state, void *user_data) {
@@ -485,7 +509,8 @@ void n_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_N); break;
         case TRIPLE_TAP: unregister_code(KC_N); break;
         case TRIPLE_HOLD: unregister_code(KC_N); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_N);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_N); break;
+        default: break;
     }
     ntap_state.state = 0;
 };
@@ -503,7 +528,8 @@ void r_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_R); unregister_code(KC_R); register_code(KC_R); unregister_code(KC_R); register_code(KC_R); break;
         case TRIPLE_HOLD: register_code(KC_R); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_R); unregister_code(KC_R); register_code(KC_R); unregister_code(KC_R); register_code(KC_R);
+        case TRIPLE_SINGLE_TAP: register_code(KC_R); unregister_code(KC_R); register_code(KC_R); unregister_code(KC_R); register_code(KC_R); break;
+        default: break;
     }
 };
 void r_reset (tap_dance_state_t *state, void *user_data) {
@@ -515,7 +541,8 @@ void r_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_R); break;
         case TRIPLE_TAP: unregister_code(KC_R); break;
         case TRIPLE_HOLD: unregister_code(KC_R); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_R);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_R); break;
+        default: break;
     }
     rtap_state.state = 0;
 };
@@ -533,7 +560,8 @@ void t_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_T); unregister_code(KC_T); register_code(KC_T); unregister_code(KC_T); register_code(KC_T); break;
         case TRIPLE_HOLD: register_code(KC_T); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_T); unregister_code(KC_T); register_code(KC_T); unregister_code(KC_T); register_code(KC_T);
+        case TRIPLE_SINGLE_TAP: register_code(KC_T); unregister_code(KC_T); register_code(KC_T); unregister_code(KC_T); register_code(KC_T); break;
+        default: break;
     }
 };
 void t_reset (tap_dance_state_t *state, void *user_data) {
@@ -545,7 +573,8 @@ void t_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_T); break;
         case TRIPLE_TAP: unregister_code(KC_T); break;
         case TRIPLE_HOLD: unregister_code(KC_T); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_T);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_T); break;
+        default: break;
     }
     ttap_state.state = 0;
 };
@@ -563,7 +592,8 @@ void v_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_V); unregister_code(KC_V); register_code(KC_V); unregister_code(KC_V); register_code(KC_V); break;
         case TRIPLE_HOLD: register_code(KC_V); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_V); unregister_code(KC_V); register_code(KC_V); unregister_code(KC_V); register_code(KC_V);
+        case TRIPLE_SINGLE_TAP: register_code(KC_V); unregister_code(KC_V); register_code(KC_V); unregister_code(KC_V); register_code(KC_V); break;
+        default: break;
     }
 };
 void v_reset (tap_dance_state_t *state, void *user_data) {
@@ -575,7 +605,8 @@ void v_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_V); break;
         case TRIPLE_TAP: unregister_code(KC_V); break;
         case TRIPLE_HOLD: unregister_code(KC_V); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_V);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_V); break;
+        default: break;
     }
     vtap_state.state = 0;
 };
@@ -593,7 +624,8 @@ void x_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_X); unregister_code(KC_X); register_code(KC_X); unregister_code(KC_X); register_code(KC_X); break;
         case TRIPLE_HOLD: register_code(KC_X); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_X); unregister_code(KC_X); register_code(KC_X); unregister_code(KC_X); register_code(KC_X);
+        case TRIPLE_SINGLE_TAP: register_code(KC_X); unregister_code(KC_X); register_code(KC_X); unregister_code(KC_X); register_code(KC_X); break;
+        default: break;
     }
 };
 void x_reset (tap_dance_state_t *state, void *user_data) {
@@ -605,7 +637,8 @@ void x_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_X); break;
         case TRIPLE_TAP: unregister_code(KC_X); break;
         case TRIPLE_HOLD: unregister_code(KC_X); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_X);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_X); break;
+        default: break;
     }
     xtap_state.state = 0;
 };
@@ -623,7 +656,8 @@ void y_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_Y); unregister_code(KC_Y); register_code(KC_Y); unregister_code(KC_Y); register_code(KC_Y); break;
         case TRIPLE_HOLD: register_code(KC_Y); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_Y); unregister_code(KC_Y); register_code(KC_Y); unregister_code(KC_Y); register_code(KC_Y);
+        case TRIPLE_SINGLE_TAP: register_code(KC_Y); unregister_code(KC_Y); register_code(KC_Y); unregister_code(KC_Y); register_code(KC_Y); break;
+        default: break;
     }
 };
 void y_reset (tap_dance_state_t *state, void *user_data) {
@@ -635,7 +669,8 @@ void y_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_Y); break;
         case TRIPLE_TAP: unregister_code(KC_Y); break;
         case TRIPLE_HOLD: unregister_code(KC_Y); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_Y);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_Y); break;
+        default: break;
     }
     ytap_state.state = 0;
 };
@@ -653,7 +688,8 @@ void z_finished (tap_dance_state_t *state, void *user_data) {
         //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP: register_code(KC_Z); unregister_code(KC_Z); register_code(KC_Z); unregister_code(KC_Z); register_code(KC_Z); break;
         case TRIPLE_HOLD: register_code(KC_Z); break;
-        case TRIPLE_SINGLE_TAP: register_code(KC_Z); unregister_code(KC_Z); register_code(KC_Z); unregister_code(KC_Z); register_code(KC_Z);
+        case TRIPLE_SINGLE_TAP: register_code(KC_Z); unregister_code(KC_Z); register_code(KC_Z); unregister_code(KC_Z); register_code(KC_Z); break;
+        default: break;
     }
 };
 void z_reset (tap_dance_state_t *state, void *user_data) {
@@ -665,7 +701,8 @@ void z_reset (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP: unregister_code(KC_Z); break;
         case TRIPLE_TAP: unregister_code(KC_Z); break;
         case TRIPLE_HOLD: unregister_code(KC_Z); break;
-        case TRIPLE_SINGLE_TAP: unregister_code(KC_Z);
+        case TRIPLE_SINGLE_TAP: unregister_code(KC_Z); break;
+        default: break;
     }
     ztap_state.state = 0;
 };
