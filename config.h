@@ -20,8 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#define TAPPING_TERM 165
-
 #ifdef RGBLIGHT_ENABLE
 #    define RGBLIGHT_EFFECT_BREATHING
 #    define RGBLIGHT_EFFECT_RAINBOW_MOOD
@@ -32,7 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #    define RGBLIGHT_EFFECT_STATIC_GRADIENT
 //#    define RGBLIGHT_EFFECT_RGB_TEST
 //#    define RGBLIGHT_EFFECT_ALTERNATING
-//#    define RGBLIGHT_EFFECT_TWINKLE
+//#    define RGBLIGHT_EFFECT_TWINKLEE
 #endif
 
 #define TAP_CODE_DELAY 5
+
+#define TAPPING_TERM 160

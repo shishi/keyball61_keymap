@@ -95,15 +95,11 @@ enum {
  */
 int cur_dance (tap_dance_state_t *state) {
     if (state->count == 1) {
-        // previous copy&paste implementation
-        // key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
-        // if (state->interrupted || !state->pressed)  return SINGLE_TAP;
-        // else return SINGLE_HOLD;
-
-        if (state->pressed) {
-            return SINGLE_HOLD;
-        } else {
+        if (state->interrupted || !state->pressed) {
             return SINGLE_TAP;
+        } else {
+            // key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
+            return SINGLE_HOLD;
         }
     }
     else if (state->count == 2) {
@@ -120,9 +116,9 @@ int cur_dance (tap_dance_state_t *state) {
             return DOUBLE_TAP;
         }
     }
-    //Assumes no one is trying to type the same letter three times (at least not quickly).
-    //If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
-    //an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
+    // Assumes no one is trying to type the same letter three times (at least not quickly).
+    // If your tap dance key is 'KC_W', and you want to type "www." quickly - then you will need to add
+    // an exception here to return a 'TRIPLE_SINGLE_TAP', and define that enum just like 'DOUBLE_SINGLE_TAP'
     else if (state->count == 3) {
         if (state->interrupted) {
             return TRIPLE_SINGLE_TAP;
@@ -201,6 +197,8 @@ void repeat_key_x_time(uint16_t keycode, int x) {
     for (int i = 0; i < x; i++) {
         register_code(keycode);
     }
+
+    // less than register_code because unregister_code in hoge_reset
     for (int i = 1; i < x; i++) {
         unregister_code(keycode);
     }
@@ -222,12 +220,18 @@ void b_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_HOLD:
             register_code(KC_B);
             break;
+        // description of DOUBLE_SINGLE_TAP
+        // case TD_SINGLE_TAP: register_code(KC_F); break;
+        // case TD_SINGLE_HOLD: register_code(KC_LCTL); break;
+        // case TD_DOUBLE_TAP: register_code(KC_ESC); break;
+        // case TD_DOUBLE_HOLD: register_code(KC_LALT); break;
+        // Last case is for fast typing. Assuming your key is `f`:
+        // For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
+        // In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
+        // case TD_DOUBLE_SINGLE_TAP: tap_code(KC_X); register_code(KC_X); break;
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_B, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_B, 3);
             break;
@@ -299,9 +303,6 @@ void c_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_C, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_C, 3);
             break;
@@ -372,9 +373,6 @@ void e_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_E, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_E, 3);
             break;
@@ -445,9 +443,6 @@ void g_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_G, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_G, 3);
             break;
@@ -519,9 +514,6 @@ void h_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_H, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_H, 3);
             break;
@@ -592,9 +584,6 @@ void i_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_I, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_I, 3);
             break;
@@ -665,9 +654,6 @@ void n_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_N, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_N, 3);
             break;
@@ -739,9 +725,6 @@ void r_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_R, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_R, 3);
             break;
@@ -812,9 +795,6 @@ void t_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_T, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_T, 3);
             break;
@@ -885,9 +865,6 @@ void v_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_V, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_V, 3);
             break;
@@ -959,9 +936,6 @@ void x_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_X, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_X, 3);
             break;
@@ -1032,9 +1006,6 @@ void y_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_Y, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_Y, 3);
             break;
@@ -1105,9 +1076,6 @@ void z_finished (tap_dance_state_t *state, void *user_data) {
         case DOUBLE_SINGLE_TAP:
             repeat_key_x_time(KC_Z, 2);
             break;
-        //Last case is for fast typing. Assuming your key is `f`:
-        //For example, when typing the word `buffer`, and you want to make sure that you send `ff` and not `Esc`.
-        //In order to type `ff` when typing fast, the next character will have to be hit within the `TAPPING_TERM`, which by default is 200ms.
         case TRIPLE_TAP:
             repeat_key_x_time(KC_Z, 3);
             break;
